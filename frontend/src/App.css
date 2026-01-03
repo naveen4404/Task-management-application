@@ -1,0 +1,24 @@
+.todo-app {
+  height: auto;
+  width: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+}
+
+label,
+input {
+  margin: 10px;
+}
+
+.success-message {
+  color: green;
+}
+.error-message {
+  color: red;
+}
+footer {
+  bottom: 0;
+  position: absolute;
+}
