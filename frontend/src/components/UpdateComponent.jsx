@@ -66,7 +66,6 @@ export default function TodoComponent() {
           id="description"
           value={todo.description}
           className="form-control form-control-sm"
-          style={{ width: 360 }}
           onChange={handleDescription}
         />
         <br />
@@ -82,7 +81,6 @@ export default function TodoComponent() {
           name="target-date"
           id="target-date"
           className="form-control form-control-sm"
-          style={{ width: 360 }}
           value={todo.targetDate}
           onChange={handleDate}
         />

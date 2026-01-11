@@ -10,7 +10,7 @@ A full-stack task management system built with Spring Boot (backend) and React (
 - **Responsive UI**: Modern, responsive interface using Bootstrap
 - **RESTful API**: Well-structured backend API with proper HTTP methods
 - **Database Integration**: MySQL database with JPA/Hibernate
-- **Security**: Password encryption and basic security configuration(It will be replaced with JWT later).
+- **Security**: JWT authentication.
 
 ## Tech Stack
 
@@ -30,7 +30,6 @@ A full-stack task management system built with Spring Boot (backend) and React (
 - **Styling**: Bootstrap 5.3.8
 - **HTTP Client**: Axios
 - **Routing**: React Router DOM
-- **Notifications**: React Hot Toast
 
 ## Prerequisites
 
@@ -128,8 +127,6 @@ The frontend will start on `http://localhost:5173`
 - `PUT /api/v1/todos/{id}` - Update existing todo
 - `PUT /api/v1/todos/mark/{id}` - Mark todo as done/undone
 - `DELETE /api/v1/todos/{id}` - Delete todo
-
-**Note**: Most endpoints require authentication via `useremail` header.(Just for now, would be replaced with JWT authentication).
 
 ## Project Structure
 

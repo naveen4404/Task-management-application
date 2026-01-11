@@ -5,6 +5,8 @@ import com.naveen.springboot.task_management_system.dto.response.TodoResponseDto
 import com.naveen.springboot.task_management_system.service.TodoService;
 import jakarta.validation.Valid;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.support.ServletUriComponentsBuilder;
 
@@ -22,8 +24,8 @@ public class TodoController {
     }
 
     @GetMapping()
-    public ResponseEntity<List<TodoResponseDto>> retrieveTodos( @RequestHeader("useremail") String userEmail){
-        List<TodoResponseDto> todos = todoService.getAllTodosByUserEmail(userEmail);
+    public ResponseEntity<List<TodoResponseDto>> retrieveTodos(Authentication authentication){
+        List<TodoResponseDto> todos = todoService.getAllTodosByUserEmail(authentication.getName());
         return ResponseEntity.ok(todos);
     }
 
@@ -34,8 +36,8 @@ public class TodoController {
     }
 
     @PostMapping()
-    public ResponseEntity<TodoResponseDto> addTodo(@Valid @RequestBody TodoRequestDto todo, @RequestHeader("useremail") String userEmail){
-        TodoResponseDto savedTodo = todoService.save(todo,userEmail);
+    public ResponseEntity<TodoResponseDto> addTodo(@Valid @RequestBody TodoRequestDto todo,Authentication authentication){
+        TodoResponseDto savedTodo = todoService.save(todo,authentication.getName());
 //      URI location = URI.create("/api/v1/todos/"+savedTodo.getId());
         URI location = ServletUriComponentsBuilder.fromCurrentRequest().path("/{id}").buildAndExpand(savedTodo.getId()).toUri();
         return ResponseEntity.created(location).body(savedTodo);

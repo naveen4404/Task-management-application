@@ -2,7 +2,6 @@ import TodoComponent from "./UpdateComponent";
 import apiClient from "../api/apiClient";
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
-import { useAuth } from "../security/AuthContextCreate";
 import toast from "react-hot-toast";
 export default function AddComponent() {
   const [todo, setTodo] = useState({
@@ -12,7 +11,6 @@ export default function AddComponent() {
   });
   const [errMsg, setErrMsg] = useState("");
   const navigate = useNavigate();
-  const userEmail = useAuth().userEmail;
   const handleDescription = (e) => {
     setTodo({ ...todo, description: e.target.value });
   };
@@ -26,11 +24,7 @@ export default function AddComponent() {
     e.preventDefault();
     const addTodo = async function () {
       try {
-        await apiClient.post("api/v1/todos", todo, {
-          headers: {
-            Useremail: userEmail,
-          },
-        });
+        await apiClient.post("api/v1/todos", todo);
         toast.success("Your todo is added!");
         navigate("/todos");
       } catch (err) {
@@ -58,7 +52,6 @@ export default function AddComponent() {
           id="description"
           value={todo.description}
           className="form-control form-control-sm"
-          style={{ width: 360 }}
           onChange={handleDescription}
         />
         <br />
@@ -75,7 +68,6 @@ export default function AddComponent() {
           id="target-date"
           value={todo.targetDate}
           className="form-control form-control-sm"
-          style={{ width: 360 }}
           onChange={handleDate}
         />
         <br />

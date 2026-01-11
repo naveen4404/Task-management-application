@@ -23,12 +23,19 @@ function App() {
             <Toaster />
             <Header />
             <Routes>
-              <Route path="/" element={<LoginForm />} />
+              <Route
+                path="/"
+                element={
+                  <AuthRoute>
+                    <Welcome />
+                  </AuthRoute>
+                }
+              />
               <Route path="/login" element={<LoginForm />} />
               <Route path="/signup" element={<SignUp />} />
 
               <Route
-                path="/welcome/:username"
+                path="/welcome"
                 element={
                   <AuthRoute>
                     <Welcome />

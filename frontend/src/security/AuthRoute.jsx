@@ -3,7 +3,8 @@ import { useAuth } from "./AuthContextCreate";
 
 function AuthRoute({ children }) {
   const authContext = useAuth();
-
+  // console.log(authContext);
+  // console.log(authContext.authenticated);
   if (authContext.authenticated) {
     return children;
   } else {

@@ -8,6 +8,7 @@ export default function SignUp() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
+  const [disable, setDisable] = useState(false);
   const navigate = useNavigate();
   function handleEmail(e) {
     setEmail(e.target.value);
@@ -21,18 +22,21 @@ export default function SignUp() {
   }
   function handleSignUp(e) {
     e.preventDefault();
+    setDisable(true);
     if (!email || !password || !confirmPassword) {
       setError("Please enter valid details!");
+      setDisable(false);
       return;
     }
     if (password !== confirmPassword) {
       setError("Passwords did not match!");
+      setDisable(false);
       return;
     }
 
     const getSignedIn = async function () {
       try {
-        await apiClient.post("/api/v1/users", {
+        await apiClient.post("/api/v1/auth/register", {
           email,
           password,
         });
@@ -40,6 +44,7 @@ export default function SignUp() {
         navigate("/login");
       } catch (err) {
         setError(err.response.data.message || "Sign up failed!");
+        setDisable(false);
       }
     };
     getSignedIn();
@@ -60,7 +65,6 @@ export default function SignUp() {
         type="email"
         name="email"
         className="form-control form-control-sm"
-        style={{ width: 360 }}
         id="email"
         placeholder="Enter email..."
         value={email}
@@ -78,10 +82,9 @@ export default function SignUp() {
       <input
         type="password"
         className="form-control form-control-sm"
-        style={{ width: 360 }}
         name="password"
         id="password"
-        placeholder="Enter password"
+        placeholder="Enter password (at least 5 characters)"
         value={password}
         onChange={handlePassword}
       />
@@ -97,7 +100,6 @@ export default function SignUp() {
       <input
         type="password"
         className="form-control form-control-sm"
-        style={{ width: 360 }}
         name="confirmPassword"
         id="confirmPassword"
         placeholder="confirm password"
@@ -109,6 +111,7 @@ export default function SignUp() {
         type="submit"
         className="btn btn-success mt-2"
         value="Sign up"
+        disabled={disable}
         onSubmit={handleSignUp}
       />
     </form>

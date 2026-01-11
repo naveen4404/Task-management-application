@@ -5,10 +5,10 @@ import jakarta.validation.constraints.Size;
 
 public class UserRequestDto {
 
-    @Email
+    @Email(message = "Please enter a valid email!")
     private String email;
 
-    @Size(min = 4)
+    @Size(min = 5,message = "password must have at least 5 characters!")
     private String password;
 
     public UserRequestDto(String email, String password) {

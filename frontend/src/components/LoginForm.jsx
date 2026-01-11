@@ -2,9 +2,11 @@ import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useAuth } from "../security/AuthContextCreate";
 import toast from "react-hot-toast";
+
 function LoginForm() {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [disable, setDisable] = useState(false);
   const [error, setError] = useState(false);
   const navigate = useNavigate();
   const authContext = useAuth();
@@ -19,13 +21,20 @@ function LoginForm() {
 
   async function handleAuth(e) {
     e.preventDefault();
+    setDisable(true);
+    if (!email || !password) {
+      setError(true);
+      setDisable(false);
+      return;
+    }
     const success = await authContext.login(email, password);
     if (success) {
       toast.success("Successfully Logged in...");
       setError(false);
-      navigate(`/welcome/${email}`);
+      navigate(`/welcome`);
     } else {
       setError(true);
+      setDisable(false);
     }
   }
 
@@ -38,18 +47,17 @@ function LoginForm() {
       <h3 style={{ textDecoration: "underline" }}>Log in here</h3>
       {error && (
         <div className="error-message">
-          Athentication failed. Please check the credentials!!
+          Authentication failed. Please check the credentials!!
         </div>
       )}
       <label htmlFor="email" style={{ fontSize: 20, fontWeight: "bold" }}>
-        email:
+        Email:
       </label>
       <br />
       <input
-        type="text"
+        type="email"
         name="email"
         className="form-control form-control-sm"
-        style={{ width: 360 }}
         id="email"
         placeholder="Enter email..."
         value={email}
@@ -67,7 +75,6 @@ function LoginForm() {
       <input
         type="password"
         className="form-control form-control-sm"
-        style={{ width: 360 }}
         name="password"
         id="password"
         placeholder="Enter password"
@@ -79,6 +86,7 @@ function LoginForm() {
         type="submit"
         className="btn btn-success mt-2"
         value="Log in"
+        disabled={disable}
         onSubmit={handleAuth}
       />
     </form>

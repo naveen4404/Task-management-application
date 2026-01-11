@@ -3,33 +3,34 @@
 //3) set state into the context
 
 import { useState } from "react";
+
 import { AuthContext } from "./AuthContextCreate";
 import apiClient from "../api/apiClient";
 
 function AuthProvider({ children }) {
-  const [authenticated, setAuthenticated] = useState(false);
-  const [userEmail, setUserEmail] = useState(null);
+  const [authenticated, setAuthenticated] = useState(() => {
+    if (localStorage.getItem("authToken")) {
+      return true;
+    } else {
+      return false;
+    }
+  });
 
-  async function login(userName, password) {
-    if (!userName || !password) {
-      setUserEmail(null);
+  //Login
+  async function login(email, password) {
+    if (!email || !password) {
       return false;
     }
 
     const getLoggedIn = async function () {
       try {
-        const credentials = window.btoa(`${userName}:${password}`);
-        await apiClient.post(
-          "/api/auth/login",
-          {},
-          {
-            headers: {
-              Authorization: `Basic ${credentials}`,
-            },
-          }
-        );
-        setUserEmail(userName);
+        const response = await apiClient.post("/api/v1/auth/login", {
+          email,
+          password,
+        });
+
         setAuthenticated(true);
+        localStorage.setItem("authToken", response.data.token);
         return true;
       } catch {
         return false;
@@ -39,13 +40,13 @@ function AuthProvider({ children }) {
     return await getLoggedIn();
   }
 
+  // logout
   function logout() {
     setAuthenticated(false);
-    setUserEmail(null);
+    localStorage.clear();
   }
-
   return (
-    <AuthContext.Provider value={{ authenticated, userEmail, login, logout }}>
+    <AuthContext.Provider value={{ authenticated, login, logout }}>
       {children}
     </AuthContext.Provider>
   );

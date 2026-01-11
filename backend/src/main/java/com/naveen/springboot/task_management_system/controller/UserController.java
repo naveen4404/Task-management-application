@@ -20,22 +20,6 @@ public class UserController {
         this.userService = userService;
     }
 
-    @PostMapping
-    public ResponseEntity<UserResponseDto> createUser(@Valid @RequestBody UserRequestDto userRequestDto) {
-        UserResponseDto createdUser = userService.createUser(userRequestDto);
-
-        // URI location = ServletUriComponentsBuilder
-        // .fromCurrentRequest()
-        // .path("/{id}")
-        // .buildAndExpand(createdUser.getId()).toUri();
-        return ResponseEntity.created(null).body(createdUser);
-    }
-
-    @GetMapping
-    public List<UserResponseDto> retrieveAllUsers() {
-        return userService.retrieveAllUsers();
-    }
-
     @GetMapping("/{id}")
     public UserResponseDto getUser(@PathVariable Integer id) {
         return userService.retrieveUser(id);
