@@ -51,7 +51,7 @@ public class JwtService {
         return getClaims(token).getSubject();
     }
 
-    private Claims getClaims(String token) throws Exception{
+    private Claims getClaims(String token){
         return Jwts
                 .parser()
                 .verifyWith(getKey())
