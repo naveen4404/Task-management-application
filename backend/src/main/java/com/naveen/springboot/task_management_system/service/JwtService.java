@@ -21,7 +21,8 @@ public class JwtService {
     @Value("${jwt.secret}")
     private String secretKey;
 
-    public String getJwtToken(String userName) {
+    public String getJwtToken(String userName)
+    {
         return generateToken(userName);
     }
 
@@ -41,16 +42,16 @@ public class JwtService {
                 .compact();
     }
 
-    private SecretKey getKey() {
+    private SecretKey getKey(){
         byte[] bytes = Decoders.BASE64.decode(secretKey);
         return Keys.hmacShaKeyFor(bytes);
     }
 
-    public String extractUsername(String token) {
+    public String extractUsername(String token) throws Exception {
         return getClaims(token).getSubject();
     }
 
-    private Claims getClaims(String token){
+    private Claims getClaims(String token) throws Exception{
         return Jwts
                 .parser()
                 .verifyWith(getKey())
@@ -60,16 +61,16 @@ public class JwtService {
 
     }
 
-    public boolean validateToken(String token, UserDetails userDetails) {
+    public boolean validateToken(String token, UserDetails userDetails) throws Exception {
         String userName = extractUsername(token);
         return userName.equals(userDetails.getUsername()) && !isExpired(token);
     }
 
-    private boolean isExpired(String token) {
+    private boolean isExpired(String token) throws Exception {
         return extractExpiration(token).before(new Date());
     }
 
-    private Date extractExpiration(String token) {
+    private Date extractExpiration(String token) throws Exception {
         return getClaims(token).getExpiration();
     }
 }

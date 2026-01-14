@@ -8,6 +8,8 @@ import org.slf4j.LoggerFactory;
 import org.springframework.dao.DataIntegrityViolationException;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.authentication.BadCredentialsException;
+import org.springframework.security.core.userdetails.UsernameNotFoundException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -49,6 +51,12 @@ public class GlobalExceptionHandler {
     @ExceptionHandler( DataIntegrityViolationException.class)
     public ResponseEntity<ApiErrorResponse> handleConstraintViolation(DataIntegrityViolationException ex){
         ApiErrorResponse response = new ApiErrorResponse(HttpStatus.BAD_REQUEST.value(),"User with this email is already existed!");
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
+    @ExceptionHandler( BadCredentialsException.class)
+    public ResponseEntity<ApiErrorResponse> userNotFound(BadCredentialsException ex){
+        ApiErrorResponse response = new ApiErrorResponse(HttpStatus.BAD_REQUEST.value(),"Wrong credentials, ensure the credentials are valid!");
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
