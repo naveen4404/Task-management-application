@@ -1,6 +1,5 @@
 package com.naveen.springboot.task_management_system.security;
 
-
 import com.naveen.springboot.task_management_system.exception.ApiErrorResponse;
 import com.naveen.springboot.task_management_system.service.JwtService;
 import com.naveen.springboot.task_management_system.service.TodoUserDetailsService;
@@ -27,13 +26,15 @@ public class JwtFilter extends OncePerRequestFilter {
     private JwtService jwtService;
     private ApplicationContext applicationContext;
     private final ObjectMapper objectMapper = new ObjectMapper();
+
     public JwtFilter(JwtService jwtService, ApplicationContext applicationContext) {
         this.jwtService = jwtService;
         this.applicationContext = applicationContext;
     }
 
     @Override
-    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain) throws ServletException, IOException {
+    protected void doFilterInternal(HttpServletRequest request, HttpServletResponse response, FilterChain filterChain)
+            throws ServletException, IOException {
 
         String authHeader = request.getHeader("Authorization");
         String token = null;
@@ -52,27 +53,27 @@ public class JwtFilter extends OncePerRequestFilter {
 
                 if (jwtService.validateToken(token, userDetails)) {
                     UsernamePasswordAuthenticationToken authToken = new UsernamePasswordAuthenticationToken(
-                            userDetails, null, userDetails.getAuthorities()
-                    );
+                            userDetails, null, userDetails.getAuthorities());
                     authToken.setDetails(new WebAuthenticationDetailsSource()
-                            .buildDetails(request)
-                    );
+                            .buildDetails(request));
                     SecurityContextHolder.getContext().setAuthentication(authToken);
 
                 }
 
             }
-        } catch (Exception e){
-            writeError(request,response,HttpStatus.UNAUTHORIZED,"Invalid authentication, Log in again!");
+        } catch (Exception e) {
+            writeError(request, response, HttpStatus.UNAUTHORIZED, "Invalid authentication, Log in again!");
+            return;
         }
 
-        filterChain.doFilter(request,response);
+        filterChain.doFilter(request, response);
     }
 
-    private void writeError(HttpServletRequest request, HttpServletResponse response, HttpStatus status, String message) throws IOException {
-        ApiErrorResponse error = new ApiErrorResponse(status.value(),message);
+    private void writeError(HttpServletRequest request, HttpServletResponse response, HttpStatus status, String message)
+            throws IOException {
+        ApiErrorResponse error = new ApiErrorResponse(status.value(), message);
         response.setStatus(status.value());
         response.setContentType(MediaType.APPLICATION_JSON_VALUE);
-        objectMapper.writeValue(response.getOutputStream(),error);
+        objectMapper.writeValue(response.getOutputStream(), error);
     }
 }
