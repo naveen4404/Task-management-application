@@ -85,7 +85,7 @@ function Todos() {
                         color: todo.done ? "#666" : "#000",
                       }}
                     >
-                      <td>
+                      <td data-label="Mark">
                         <MarkComponent
                           id={todo.id}
                           setMessage={setMessage}
@@ -93,11 +93,33 @@ function Todos() {
                           refreshTodos={refreshTodos}
                         />
                       </td>
-                      <td>{i + 1}</td>
-                      <td>{todo.description}</td>
-                      <td>{`${todo.done ? "Completed" : "Pending"}`}</td>
-                      <td>{todo.targetDate}</td>
-                      <td>
+                      <td data-label="Id">{i + 1}</td>
+                      <td data-label="Description">{todo.description}</td>
+                      <td data-label="Status">{`${todo.done ? "Completed" : "Pending"}`}</td>
+                      <td data-label="Target Date">
+                        {todo.targetDate}
+                        <span className="action-buttons-inline">
+                          <button
+                            type="button"
+                            className="btn btn-warning"
+                            onClick={() => {
+                              handleDelete(todo.id);
+                            }}
+                          >
+                            Delete
+                          </button>
+                          <button
+                            type="button"
+                            className="btn btn-success"
+                            onClick={() => {
+                              handleUpdate(todo.id);
+                            }}
+                          >
+                            Update
+                          </button>
+                        </span>
+                      </td>
+                      <td className="desktop-only">
                         <button
                           type="button"
                           className="btn btn-warning"
@@ -108,7 +130,7 @@ function Todos() {
                           Delete
                         </button>
                       </td>
-                      <td>
+                      <td className="desktop-only">
                         <button
                           type="button"
                           className="btn btn-success"
